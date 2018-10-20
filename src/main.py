@@ -196,11 +196,11 @@ def main(port, exchange_hostname):
                 if fair_value_average(history[key],val//3) > fair_value_average(history[key], val//15) :
 
                     order_values = find_min_on_sell(instruments[key]["sell"])
-                    bank_account -= order_values[0]*order_values[1]
 
                     if bank_account < -30000:
-                            bank_account += order_values[0]*order_values[1]
+                        pass
                     else:
+                        bank_account -= order_values[0]*order_values[1]
                         buy_order(exchange,key,order_values[0],
                             order_values[1],order_id)
                         order_id+=1
