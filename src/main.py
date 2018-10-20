@@ -80,7 +80,7 @@ def sell_order(exchange,instrument,price,amount,order_id):
 
 
 def cancel_order(exchange,order_id):
-    write_to_exchange(exchange, {"type": "out", "order_id": order_id})
+    write_to_exchange(exchange, {"type": "cancel", "order_id": order_id})
 
 # ~~~~~============== Frequency and history updaters ==============~~~~~
 
