@@ -33,7 +33,8 @@ def read_from_exchange(exchange):
 
 def parse_instruments(instruments, message_loaded):
     #instrument_names = ["BOND", "GS", "MS", "WFC", "XLF", "VALBZ", "VALE"]
-    if message_loaded["type"]=="book" :
+    if message_loaded["type"] == "book" :
+        print("Message: {message_loaded}", file=sys.stderr)
         instruments[message_loaded["symbols"]]={"buy":message_loaded["symbols"]["buy"],
             "sell":message_loaded["symbols"]["sell"]}
 
