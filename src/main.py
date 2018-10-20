@@ -198,7 +198,7 @@ def main(port, exchange_hostname):
                     order_id+=1
 
             else:
-                print(f"tst: {find_max_on_buy(val["buy"])[0]}")
+                print(f"tst: {find_max_on_buy(val['buy'])[0]}")
                 sell_order(exchange, key, find_max_on_buy(val["buy"])[0],
                         find_max_on_buy(val["buy"])[1], order_id)
                 order_id+=1
