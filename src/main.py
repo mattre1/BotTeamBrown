@@ -190,7 +190,7 @@ def main(port, exchange_hostname):
             print(f"Bank account: {bank_account}")
         print(update_rate)
         for key, val in update_rate.items():
-            # print(fair_value_average(history[key],val), fair_value_average(history[key], val/5)
+            print(fair_value_average(history[key],val), fair_value_average(history[key], val/5))
             
             if fair_value_average(history[key],val) > fair_value_average(history[key], val/5) :
             
