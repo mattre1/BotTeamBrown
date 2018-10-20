@@ -223,7 +223,7 @@ def main(port, exchange_hostname):
                         bank_account -= order[2]*order[4]
                         buys -= order[2]*order[4]
                     order_history.remove(order)
-
+        print("skompilowane",file=sys.stderr)
 
         '''
         for key, val in instruments.items():
