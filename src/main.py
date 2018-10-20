@@ -112,7 +112,7 @@ def main(port, exchange_hostname):
         "VALBZ":0,
         "VALE":0
         }
-    update_ratio = {
+    update_rate = {
         "BOND":200,
         "GS":800,
         "MS":800,
