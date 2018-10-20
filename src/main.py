@@ -111,20 +111,17 @@ def main(port, exchange_hostname):
 
 if __name__ == "__main__":
     port = 25000
-    exchange_hostname = "test-exch-"
+    exchange_hostname = "test-exch-"+team_name
 
     if len(sys.argv) >= 2:
         print(f"Bot args: {str(sys.argv)}", file=sys.stderr)
 
         if sys.argv[1] == "test":
-            exchange_hostname += team_name
         elif sys.argv[1] == "test_slow":
             port += 1
-            exchange_hostname += team_name
         elif sys.argv[1] == "prod":
-            exchange_hostname += "production"
+            exchange_hostname = "production"
     else:
         port += 2
-        exchange_hostname += team_name
 
     main(port, exchange_hostname)
