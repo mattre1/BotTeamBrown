@@ -144,14 +144,26 @@ def main(port, exchange_hostname):
 
 
     order_id=0
+    for i in range(5):
+        buy_order(exchange, "BOND", 999-len(buy_bond_list), 1, order_id)
+        buy_bond_list.append(order_id)
+        order_id += 1
+
+        sell_order(exchange, "BOND", 1001+len(sell_bound_list), 1, order_id)
+        sell_bound_list.append(order_id)
+        order_id += 1
+
+
+
+
     while(True):
         if len(buy_bond_list) < 5:
-            buy_order(exchange, "BOND", 999-(len(buy_bond_list)//2), 1, order_id)
+            buy_order(exchange, "BOND", 999, 1, order_id)
             buy_bond_list.append(order_id)
             order_id += 1
 
         if len(sell_bound_list) < 5:
-            sell_order(exchange, "BOND", 1001+(len(sell_bound_list)//2), 1, order_id)
+            sell_order(exchange, "BOND", 1001, 1, order_id)
             sell_bound_list.append(order_id)
             order_id += 1
 
@@ -162,11 +174,11 @@ def main(port, exchange_hostname):
             print(f"Bank account: {bank_account}")
 
             if exchange_says["order_id"] in sell_bound_list:
-                print("My sell order was bought")
+                print(f"My sell order was bought. {len(sell_bond_list)} left"")
                 sell_bound_list.remove(exchange_says["order_id"])
 
             if exchange_says["order_id"] in buy_bond_list:
-                print("My buy order was selled")
+                print(f"My buy order was selled. {len(buy_bond_list)} left")
                 buy_bond_list.remove(exchange_says["order_id"])
 
 
