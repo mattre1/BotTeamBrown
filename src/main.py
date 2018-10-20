@@ -10,6 +10,7 @@ from __future__ import print_function
 import sys
 import socket
 import json
+import time
 
 # ~~~~~============== CONFIGURATION  ==============~~~~~
 # replace REPLACEME with your team name!
@@ -79,8 +80,22 @@ def main(port, exchange_hostname):
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     read_from_exchange(exchange)
     bank_account = 0
+    frequency = {
+        "BOND":0,
+        "GS":0,
+        "MS":0,
+        "WFC":0,
+        "XLF":0,
+        "VALBZ":0,
+        "VALE":0
+    }
+
 
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
+
+    second_clock = time.time()
+
+
 
     order_id=0
     while(True):
@@ -88,6 +103,13 @@ def main(port, exchange_hostname):
         if exchange_says["type"]=="ack" or exchange_says["type"]=="error" :
             print("Exchange says:", exchange_says, file=sys.stderr)
         parse_instruments(instruments, exchange_says)
+
+        if exchange_says["type"] == "book":
+            frequency[exchange_says["symbol"]] += 1
+
+        if(time.time() - second_clock > 0.2):
+            second_clock = time.time()
+            print(frequency)
 
         for key, val in instruments.items():
             if key == "BOND":
