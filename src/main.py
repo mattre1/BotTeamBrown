@@ -31,29 +31,37 @@ def read_from_exchange(exchange):
 
 # ~~~~~============== STATE PARSING ==============~~~~~
 
-def parse_instruments(instruments,server_message):
+def parse_instruments(instruments,message_loaded):
     #instrument_names = ["BOND", "GS", "MS", "WFC", "XLF", "VALBZ", "VALE"]
-    message_loaded = json.loads(server_message)
     if message_loaded["type"]=="book" :
-        instruments[message_loaded["symbols"]]={"buy":message_loaded["symbols"]["buy"],
-            "sell":message_loaded["symbols"]["sell"]}
+        instruments[message_loaded["symbol"]]={"buy":message_loaded["symbol"]["buy"],
+            "sell":message_loaded["symbol"]["sell"]}
 
-def find_min_on_buy(buy_table):
-    minimum = 0
-    for val in buy_table:
+
+def find_min_on_sell(sell_table):
+    minimum = 1000000
+    for val in sell_table:
         minimum = max(val[0],minimum)
     return minimum
 
-def find_max_on_sell(sell_table):
-    maximum = 10000000
-    for val in sell_table:
-        maximum = min(val[0],maximum)
+def find_max_on_buy(buy_table):
+    maximum = [0,0]
+    for val in buy_table:
+        maximum = min(val[0],maximum[0])
+        if(maximum[0]=val[0])
+            maximum[1]=val[1]
     return maximum
 
 def find_fair_value(instrument):
-    minimum = find_min_on_buy(instrument["buy"])
-    maximum = find_max_on_sell(instrument["sell"])
+    minimum = find_min_on_buy(instrument["buy"])[0]
+    maximum = find_max_on_sell(instrument["sell"])[0]
     return (minimum+maximum)/2;
+
+# ~~~~~============== EXCHANGE CONTACT ==============~~~~~
+
+def buy_order(exchange,instrument,price,amount,order_id):
+    write_to_exchange(exchange, {"type": "add", "order_id": order_id, "symbol":instrument,
+        "dir":"BUY","size":amount,"price":price})
 
 
 # ~~~~~============== MAIN LOOP ==============~~~~~
@@ -71,8 +79,14 @@ def main(port, exchange_hostname):
         parse_instruments(instruments,exchange_says)
         for key in instruments.keys():
             if key == "BOND":
-                if find_max_on_sell(instruments[key])<1000:
-                    pass
+                if find_min_on_sell(instruments[key]["sell"])[0]<1000:
+                    buy_order(exchange,key,find_min_on_sell(instruments[key]["sell"])[0],
+                        find_min_on_sell(instruments[key]["sell"])[1],order_id)
+                    order_id+=1
+                if find_max_on_buy(instruments[key]["buy"])[0]>1000:
+                    sell_order(exchange,key,find_max_on_buy(instruments[key]["buy"])[0],
+                        find_max_on_buy(instruments[key]["buy"])[1],order_id)
+                    order_id+=1
     # A common mistake people make is to call write_to_exchange() > 1
     # time for every read_from_exchange() response.
     # Since many write messages generate marketdata, this will cause an
