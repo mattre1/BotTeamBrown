@@ -217,6 +217,8 @@ def main(port, exchange_hostname):
         for order in order_history:
             if find_fair_value(instruments[order[0]])*1.01>order_values[0] or find_fair_value(instruments[order[0]])*0.99<order_values[0] :
                     cancel_order(exchange,order[2])
+                    order_history.remove(order)
+
         '''
         for key, val in instruments.items():
             if key == "BOND":
