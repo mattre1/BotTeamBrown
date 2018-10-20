@@ -82,7 +82,8 @@ def main(port, exchange_hostname):
     start_time=time.time()
     exchange = connect(port, exchange_hostname)
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
-    hello_from_exchange = read_from_exchange(exchange)
+    read_from_exchange(exchange)
+
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
     order_id=0
