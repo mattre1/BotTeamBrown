@@ -158,7 +158,7 @@ def main(port, exchange_hostname):
 
         for key, val in update_rate.items():
             if fair_value_average(history[key],val)>fair_value_average(history[key],val/5):
-
+                pass
 
         for key, val in instruments.items():
             if key == "BOND":
