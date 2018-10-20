@@ -152,7 +152,7 @@ def main(port, exchange_hostname):
 
     while(True):
         exchange_says = read_from_exchange(exchange)
-        print(exchange_says,file=sys.stderr)
+        #print(exchange_says,file=sys.stderr)
         '''
         if len(buy_bond_list) < 5:
             buy_order(exchange, "BOND", 999, 1, order_id)
@@ -184,7 +184,7 @@ def main(port, exchange_hostname):
 
         if(time.time() - second_clock > 1.0):
             second_clock = time.time()
-            print(f"Bank account: {bank_account}")
+            print(f"Bank account: {bank_account}",file=sys.stderr)
 
         #print(f"Update rate: {update_rate}")
 
