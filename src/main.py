@@ -127,8 +127,8 @@ def main(port, exchange_hostname):
     #order_history = {}
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
-    buy_bond_list = []
-    sell_bond_list = []
+    #buy_bond_list = []
+    #sell_bond_list = []
 
     second_clock = time.time()
 
@@ -148,6 +148,8 @@ def main(port, exchange_hostname):
 
 
     while(True):
+        exchange_says = read_from_exchange(exchange)
+
         '''
         if len(buy_bond_list) < 5:
             buy_order(exchange, "BOND", 999, 1, order_id)
@@ -159,7 +161,6 @@ def main(port, exchange_hostname):
             sell_bond_list.append(order_id)
             order_id += 1
 
-        exchange_says = read_from_exchange(exchange)
 
         if exchange_says["type"]=="ack" or exchange_says["type"]=="error" :
             print(f"Exchange says: {exchange_says}", file=sys.stderr)
