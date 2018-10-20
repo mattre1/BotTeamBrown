@@ -1,0 +1,40 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.6-jessie
+    steps:
+      - checkout
+      - run:
+          name: Install required packages
+          command: |
+            sudo pip3 install pyflakes
+      - run:
+          name: Check syntax
+          command: |
+            pyflakes src/*.py
+  build:
+    docker:
+      - image: circleci/python:3.6-jessie
+    steps:
+      - checkout
+      - run:
+          name: Install required packages
+          command: |
+            pip3 install -r requirements.txt -t src/
+      - run:
+          name: Deploy bot
+          command: |
+            scp -r src/ ubuntu@34.255.3.221:~/bot
+
+workflows:
+  version: 2
+  test_and_build:
+    jobs:
+      - test
+      - build:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
