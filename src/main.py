@@ -64,14 +64,17 @@ def main(port, exchange_hostname):
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     hello_from_exchange = read_from_exchange(exchange)
     #write_to_exchange(exchange, {"type": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
+
     order_id=0
     while(time.time()-start_time<1):
         exchange_says = read_from_exchange(exchange)
         print("Exchange says:", exchange_says, file=sys.stderr)
         parse_instruments(instruments,exchange_says)
-        for key in instruments.keys():
+
+        for key, val in instruments.items():
             if key == "BOND":
-                if find_max_on_sell(instruments[key])<1000:
+                print(f"val {val}, val[sell]: {val["sell"]}", file=sys.stderr)
+                if find_max_on_sell(val["sell"])<1000:
                     pass
     # A common mistake people make is to call write_to_exchange() > 1
     # time for every read_from_exchange() response.
