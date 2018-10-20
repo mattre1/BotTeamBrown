@@ -238,10 +238,11 @@ def main(port, exchange_hostname):
                         find_max_on_buy(val["buy"])[1],order_id)
                     order_id+=1
         '''
+        print("nowawersja",file=sys.stderr)
         if exchange_says["type"]=="fill":
-            print(exchange_says,file=sys.stderr)
+            #print(exchange_says,file=sys.stderr)
             if exchange_says["dir"]=="SELL":
-                print("filled",file=sys.stderr)
+                #print("filled",file=sys.stderr)
                 bank_account+=exchange_says["price"]*exchange_says["size"]
 
     # print(order_history)
