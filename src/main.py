@@ -217,7 +217,7 @@ def main(port, exchange_hostname):
         for order in order_history:
             if find_fair_value(instruments[order[0]])*1.01>order_values[0] or find_fair_value(instruments[order[0]])*0.99<order_values[0] :
                     cancel_order(exchange,order[2])
-                    if order[3]==0:
+                    if order[3]==1:
                         bank_account -= order[2]*order[4]
 
                     order_history.remove(order)
