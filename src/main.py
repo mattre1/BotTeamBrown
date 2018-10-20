@@ -150,10 +150,11 @@ def main(port, exchange_hostname):
     '''
 
 
-    #max_orders=0
+    max_orders=0
     while(True):
         exchange_says = read_from_exchange(exchange)
         print(exchange_says,file=sys.stderr)
+        max_orders+=1
         '''
         if len(buy_bond_list) < 5:
             buy_order(exchange, "BOND", 999, 1, order_id)
@@ -190,7 +191,8 @@ def main(port, exchange_hostname):
         #print(f"Update rate: {update_rate}")
 
         for key, val in update_rate.items():
-
+            if max_orders<order_id:
+                break
             #print(fair_value_average(history[key],val), fair_value_average(history[key], val//5))
             if key in instruments:
                 if fair_value_average(history[key],val//3) > fair_value_average(history[key], val//15) :
@@ -218,6 +220,7 @@ def main(port, exchange_hostname):
             if find_fair_value(instruments[order[0]])*1.01>order_values[0] or find_fair_value(instruments[order[0]])*0.99<order_values[0] :
                     cancel_order(exchange,order[2])
                     order_history.remove(order)
+                    max_orders+=1
 
         '''
         for key, val in instruments.items():
