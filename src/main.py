@@ -205,16 +205,16 @@ def main(port, exchange_hostname):
 
                 else:
                     order_values = find_max_on_buy(instruments[key]["buy"])
-                    if bank_account < -30000:
-                        pass
-                    else:
-                        bank_account -= order_values[0]*order_values[1]
-                        buys-=order_values[0]*order_values[1]
+                    #if bank_account < -30000:
+                    #    pass
+                    #else:
+                    bank_account -= order_values[0]*order_values[1]
+                    buys-=order_values[0]*order_values[1]
 
-                        sell_order(exchange, key, order_values[0],
-                                order_values[1], order_id)
-                        order_id+=1
-                        order_history.append([key,order_values[0],order_id,1,order_values[1]])
+                    sell_order(exchange, key, order_values[0],
+                            order_values[1], order_id)
+                    order_id+=1
+                    order_history.append([key,order_values[0],order_id,1,order_values[1]])
         #print("unexpected",file=sys.stderr)
         for order in order_history:
             if find_fair_value(instruments[order[0]])*1.01>order[1] or find_fair_value(instruments[order[0]])*0.99<order[1] :
