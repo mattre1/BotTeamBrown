@@ -73,7 +73,7 @@ def main(port, exchange_hostname):
 
         for key, val in instruments.items():
             if key == "BOND":
-                print(f"val {val}, val[sell]: {val["sell"]}", file=sys.stderr)
+                print(f"val {val}", file=sys.stderr)
                 if find_max_on_sell(val["sell"])<1000:
                     pass
     # A common mistake people make is to call write_to_exchange() > 1
