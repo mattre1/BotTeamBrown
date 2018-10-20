@@ -83,12 +83,13 @@ def main(port, exchange_hostname):
     exchange = connect(port, exchange_hostname)
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     hello_from_exchange = read_from_exchange(exchange)
-    #write_to_exchange(exchange, {"type": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
+    #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
     order_id=0
     while(time.time()-start_time<1):
         exchange_says = read_from_exchange(exchange)
-        print("Exchange says:", exchange_says, file=sys.stderr)
+        if exchange_says["type"]=="ack" or exchange_says["type"]=="error" :
+            print("Exchange says:", exchange_says, file=sys.stderr)
         parse_instruments(instruments, exchange_says)
 
         for key, val in instruments.items():
@@ -105,7 +106,7 @@ def main(port, exchange_hostname):
     # time for every read_from_exchange() response.
     # Since many write messages generate marketdata, this will cause an
     # exponential explosion in pending messages. Please, don't do that!
-    print("The exchange replied:", hello_from_exchange, file=sys.stderr)
+    # print("The exchange replied:", hello_from_exchange, file=sys.stderr)
 
 if __name__ == "__main__":
     port = 25000
