@@ -65,7 +65,7 @@ def main(port, exchange_hostname):
     hello_from_exchange = read_from_exchange(exchange)
     #write_to_exchange(exchange, {"type": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
-    order_id=0
+    # order_id=0
     while(time.time()-start_time<1):
         exchange_says = read_from_exchange(exchange)
         print("Exchange says:", exchange_says, file=sys.stderr)
