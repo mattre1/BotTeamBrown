@@ -237,10 +237,11 @@ def main(port, exchange_hostname):
                     sell_order(exchange,key,find_max_on_buy(val["buy"])[0],
                         find_max_on_buy(val["buy"])[1],order_id)
                     order_id+=1
+        '''
         if exchange_says["type"]=="fill":
             if exchange_says["dir"]=="BUY":
                 bank_account+=exchange_says["price"]*exchange_says["size"]
-        '''
+
     # print(order_history)
 
 
