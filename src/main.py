@@ -189,7 +189,7 @@ def main(port, exchange_hostname):
         #print(f"Update rate: {update_rate}")
 
         for key, val in update_rate.items():
-            if len(order_history)>10:
+            if len(order_history)>5:
                 break
             #print(fair_value_average(history[key],val), fair_value_average(history[key], val//5))
             if key in instruments:
