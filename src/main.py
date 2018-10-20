@@ -82,40 +82,14 @@ def sell_order(exchange,instrument,price,amount,order_id):
 # ~~~~~============== Frequency and history updaters ==============~~~~~
 
 def frequency_counter(frequency, update_ratio, exchange_says):
-    if "BOND" not in frequency:
-        frequency = {
-        "BOND":0,
-        "GS":0,
-        "MS":0,
-        "WFC":0,
-        "XLF":0,
-        "VALBZ":0,
-        "VALE":0
-        }
-    if "BOND" not in update_ratio:
-        update_ratio = {
-        "BOND":200,
-        "GS":800,
-        "MS":800,
-        "WFC":800,
-        "XLF":200,
-        "VALBZ":800,
-        "VALE":300
-        }
     if exchange_says["type"] == "book":
             frequency[exchange_says["symbol"]] += 1
 
+    print(f"Update ratio (inside):{update_ratio}")
+
 
 def history_updater(history, exchange_says):
-    history = {
-        "BOND":[],
-        "GS":[],
-        "MS":[],
-        "WFC":[],
-        "XLF":[],
-        "VALBZ":[],
-        "VALE":[]
-        }
+
     if exchange_says["type"] == "book":
         history[exchange_says["symbol"]].append(find_fair_value(exchange_says))
 
@@ -129,14 +103,30 @@ def main(port, exchange_hostname):
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     read_from_exchange(exchange)
     bank_account = 0
-    frequency,update_rate = {},{}
-    history = {}
-    order_history = {}
+    frequency = {
+        "BOND":0,
+        "GS":0,
+        "MS":0,
+        "WFC":0,
+        "XLF":0,
+        "VALBZ":0,
+        "VALE":0
+        }
+    update_ratio = {
+        "BOND":200,
+        "GS":800,
+        "MS":800,
+        "WFC":800,
+        "XLF":200,
+        "VALBZ":800,
+        "VALE":300
+        }
+    history = { "BOND":[], "GS":[], "MS":[], "WFC":[], "XLF":[], "VALBZ":[], "VALE":[]}
     #order_history = {}
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
     buy_bond_list = []
-    sell_bound_list = []
+    sell_bond_list = []
 
     second_clock = time.time()
 
@@ -148,8 +138,8 @@ def main(port, exchange_hostname):
         buy_bond_list.append(order_id)
         order_id += 1
 
-        sell_order(exchange, "BOND", 1001+len(sell_bound_list), 1, order_id)
-        sell_bound_list.append(order_id)
+        sell_order(exchange, "BOND", 1001+len(sell_bond_list), 1, order_id)
+        sell_bond_list.append(order_id)
         order_id += 1
 
 
@@ -161,9 +151,9 @@ def main(port, exchange_hostname):
             buy_bond_list.append(order_id)
             order_id += 1
 
-        if len(sell_bound_list) < 5:
+        if len(sell_bond_list) < 5:
             sell_order(exchange, "BOND", 1001, 1, order_id)
-            sell_bound_list.append(order_id)
+            sell_bond_list.append(order_id)
             order_id += 1
 
         exchange_says = read_from_exchange(exchange)
@@ -172,9 +162,9 @@ def main(port, exchange_hostname):
             print(f"Exchange says: {exchange_says}", file=sys.stderr)
             print(f"Bank account: {bank_account}")
 
-            if exchange_says["order_id"] in sell_bound_list:
+            if exchange_says["order_id"] in sell_bond_list:
                 print(f"My sell order was bought. {len(sell_bond_list)} left")
-                sell_bound_list.remove(exchange_says["order_id"])
+                sell_bond_list.remove(exchange_says["order_id"])
 
             if exchange_says["order_id"] in buy_bond_list:
                 print(f"My buy order was selled. {len(buy_bond_list)} left")
@@ -188,14 +178,20 @@ def main(port, exchange_hostname):
         if(time.time() - second_clock > 1.0):
             second_clock = time.time()
             print(f"Bank account: {bank_account}")
-        print(update_rate)
+
+        print(f"Update rate: {update_rate}")
+
         for key, val in update_rate.items():
-            print(fair_value_average(history[key],val),fair_value_average(history[key],val//5))
-            if fair_value_average(history[key],val)>fair_value_average(history[key],val//5):
-                order_values=find_min_on_sell(val["sell"])
-                bank_account-=order_values[0]*order_values[1]
-                if bank_account<-30000:
-                        bank_account+=order_values[0]*order_values[1]
+
+            print(fair_value_average(history[key],val), fair_value_average(history[key], val/5))
+
+            if fair_value_average(history[key],val) > fair_value_average(history[key], val/5) :
+
+                order_values = find_min_on_sell(val["sell"])
+                bank_account -= order_values[0]*order_values[1]
+
+                if bank_account < -30000:
+                        bank_account += order_values[0]*order_values[1]
                 else:
                     buy_order(exchange,key,order_values[0],
                         order_values[1],order_id)
@@ -226,7 +222,8 @@ def main(port, exchange_hostname):
         if exchange_says["type"]=="fill":
             if exchange_says["dir"]=="BUY":
                 bank_account+=exchange_says["price"]*exchange_says["size"]
-    print(order_history)
+
+    # print(order_history)
 
 
 if __name__ == "__main__":
