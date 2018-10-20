@@ -17,8 +17,6 @@ team_name="TEAMBROWS"
 
 # ~~~~~============== NETWORKING CODE ==============~~~~~
 def connect(port, exchange_hostname):
-    print(f"Connect: {exchange_hostname}:{port}")
-    
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((exchange_hostname, port))
     return s.makefile('rw', 1)
@@ -36,10 +34,6 @@ def read_from_exchange(exchange):
 def parse_instruments(instruments, message_loaded):
     #instrument_names = ["BOND", "GS", "MS", "WFC", "XLF", "VALBZ", "VALE"]
     if message_loaded["type"] == "book" :
-        #print(f"Message: {message_loaded}", file=sys.stderr)
-        #print(f"Message symbol: {message_loaded['symbol']}", file=sys.stderr)
-        #print(f"Message buy: {message_loaded['buy']}", file=sys.stderr)
-        #print(f"Message sell: {message_loaded['sell']}", file=sys.stderr)
 
         instruments[message_loaded["symbol"]] = {
             "buy": message_loaded["buy"],
@@ -79,9 +73,6 @@ def sell_order(exchange,instrument,price,amount,order_id):
         "dir":"SELL","size":amount,"price":price})
 
 # ~~~~~============== MAIN LOOP ==============~~~~~
-
-
-
 def main(port, exchange_hostname):
     instruments = {}
     exchange = connect(port, exchange_hostname)
@@ -118,11 +109,7 @@ def main(port, exchange_hostname):
         if exchange_says["type"]=="fill":
             if exchange_says["dir"]=="BUY":
                 bank_account+=exchange_says["price"]*exchange_says["size"]
-    # A common mistake people make is to call write_to_exchange() > 1
-    # time for every read_from_exchange() response.
-    # Since many write messages generate marketdata, this will cause an
-    # exponential explosion in pending messages. Please, don't do that!
-    # print("The exchange replied:", hello_from_exchange, file=sys.stderr)
+
 
 if __name__ == "__main__":
     port = 25000
