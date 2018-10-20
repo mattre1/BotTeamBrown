@@ -58,8 +58,8 @@ def find_max_on_buy(buy_table):
 
 
 def find_fair_value(instrument):
-    minimum = find_min_on_buy(instrument["buy"])[0]
-    maximum = find_max_on_sell(instrument["sell"])[0]
+    minimum = find_min_on_sell(instrument["sell"])[0]
+    maximum = find_max_on_buy(instrument["buy"])[0]
     return (minimum+maximum)/2;
 
 # ~~~~~============== EXCHANGE CONTACT ==============~~~~~
@@ -67,6 +67,11 @@ def find_fair_value(instrument):
 def buy_order(exchange,instrument,price,amount,order_id):
     write_to_exchange(exchange, {"type": "add", "order_id": order_id, "symbol":instrument,
         "dir":"BUY","size":amount,"price":price})
+
+def sell_order(exchange,instrument,price,amount,order_id):
+    write_to_exchange(exchange, {"type": "add", "order_id": order_id, "symbol":instrument,
+        "dir":"SELL","size":amount,"price":price})
+
 
 
 # ~~~~~============== MAIN LOOP ==============~~~~~
@@ -78,7 +83,7 @@ def main(port, exchange_hostname):
     hello_from_exchange = read_from_exchange(exchange)
     #write_to_exchange(exchange, {"type": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
-    # order_id=0
+    order_id=0
     while(time.time()-start_time<1):
         exchange_says = read_from_exchange(exchange)
         print("Exchange says:", exchange_says, file=sys.stderr)
