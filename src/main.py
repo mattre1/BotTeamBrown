@@ -26,8 +26,9 @@ def write_to_exchange(exchange, obj):
     exchange.write("\n")
 
 def read_from_exchange(exchange):
-    print(exchange.readline(), file=sys.stderr)
-    return json.loads(exchange.readline())
+    tmp = exchange.readline()
+    print(tmp, file=sys.stderr)
+    return json.loads(tmp)
 
 # ~~~~~============== STATE PARSING ==============~~~~~
 def parse_instruments(instruments, message_loaded):
