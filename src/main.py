@@ -192,7 +192,8 @@ def main(port, exchange_hostname):
         for key, val in update_rate.items():
             print(fair_value_average(history[key],val), fair_value_average(history[key], val/5)
             
-            if fair_value_average(history[key],val) > fair_value_average(history[key], val/5):
+            # if fair_value_average(history[key],val) > fair_value_average(history[key], val/5) :
+            if False:
             
                 order_values = find_min_on_sell(val["sell"])
                 bank_account -= order_values[0]*order_values[1]
