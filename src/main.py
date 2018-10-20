@@ -77,12 +77,15 @@ def sell_order(exchange,instrument,price,amount,order_id):
 
 # ~~~~~============== MAIN LOOP ==============~~~~~
 
+
+
 def main(port, exchange_hostname):
     instruments = {}
     start_time=time.time()
     exchange = connect(port, exchange_hostname)
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     read_from_exchange(exchange)
+    bank_account = 0
 
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
@@ -97,14 +100,22 @@ def main(port, exchange_hostname):
             if key == "BOND":
                 #print(find_min_on_sell(val["sell"])[0],
                 #    find_max_on_buy(val["buy"])[0])
-                if find_min_on_sell(val["sell"])[0]<1000:
-                    buy_order(exchange,key,find_min_on_sell(val["sell"])[0],
-                        find_min_on_sell(val["sell"])[1],order_id)
-                    order_id+=1
+                if find_min_on_sell(val["sell"])[0]<1000 and bank_account > -20000:
+                    order_values=find_min_on_sell(val["sell"])
+                    bank_account-=order_values[0]*order_values[1]
+                    if bank_account<-30000:
+                        bank_account+=order_values[0]*order_values[1]
+                    else:
+                        buy_order(exchange,key,order_values[0],
+                            order_values[1],order_id)
+                        order_id+=1
                 if find_max_on_buy(val["buy"])[0]>1000:
                     sell_order(exchange,key,find_max_on_buy(val["buy"])[0],
                         find_max_on_buy(val["buy"])[1],order_id)
                     order_id+=1
+        if exchange_says["type"]=="fill":
+            if exchange_says["dir"]=="BUY":
+                bank_account+=exchange_says["price"]*exchange_says["size"]
     # A common mistake people make is to call write_to_exchange() > 1
     # time for every read_from_exchange() response.
     # Since many write messages generate marketdata, this will cause an
