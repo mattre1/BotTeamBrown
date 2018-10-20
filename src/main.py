@@ -73,14 +73,12 @@ def sell_order(exchange,instrument,price,amount,order_id):
     write_to_exchange(exchange, {"type": "add", "order_id": order_id, "symbol":instrument,
         "dir":"SELL","size":amount,"price":price})
 
+
 # ~~~~~============== MAIN LOOP ==============~~~~~
-def main(port, exchange_hostname):
-    instruments = {}
-    exchange = connect(port, exchange_hostname)
-    write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
-    read_from_exchange(exchange)
-    bank_account = 0
-    frequency = {
+
+def frequency_counter(frequency, server_message):
+    if "BOND" not in frequency:
+        frequency = {
         "BOND":0,
         "GS":0,
         "MS":0,
@@ -88,8 +86,22 @@ def main(port, exchange_hostname):
         "XLF":0,
         "VALBZ":0,
         "VALE":0
-    }
+        }
+    if exchange_says["type"] == "book":
+            frequency[exchange_says["symbol"]] += 1
 
+
+
+
+# ~~~~~============== MAIN LOOP ==============~~~~~
+def main(port, exchange_hostname):
+    instruments = {}
+    exchange = connect(port, exchange_hostname)
+    write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
+    read_from_exchange(exchange)
+    bank_account = 0
+    frequency = {}
+    history = []
 
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
@@ -104,13 +116,11 @@ def main(port, exchange_hostname):
         if exchange_says["type"]=="ack" or exchange_says["type"]=="error" :
             print(f"Exchange says: {exchange_says}", file=sys.stderr)
             print(f"Bank account: {bank_account}")
-        
+
         parse_instruments(instruments, exchange_says)
 
-        if exchange_says["type"] == "book":
-            frequency[exchange_says["symbol"]] += 1
 
-        if(time.time() - second_clock > 0.2):
+        if(time.time() - second_clock > 1.0):
             second_clock = time.time()
             print(frequency)
 
