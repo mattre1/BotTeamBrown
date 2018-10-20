@@ -205,7 +205,7 @@ def main(port, exchange_hostname):
                             order_values[1],order_id)
                         order_id+=1
                         order_history.append([key,order_values[0],order_id,0,order_values[1]])
-
+'''
                 else:
                     order_values = find_max_on_buy(instruments[key]["buy"])
 
@@ -213,7 +213,7 @@ def main(port, exchange_hostname):
                             order_values[1], order_id)
                     order_id+=1
                     order_history.append([key,order_values[0],order_id,1,order_values[1]])
-
+'''
         for order in order_history:
             if find_fair_value(instruments[order[0]])*1.01>order_values[0] or find_fair_value(instruments[order[0]])*0.99<order_values[0] :
                     cancel_order(exchange,order[2])
