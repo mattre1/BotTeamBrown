@@ -42,18 +42,51 @@ def write_to_exchange(exchange, obj):
 def read_from_exchange(exchange):
     return json.loads(exchange.readline())
 
+# ~~~~~============== STATE PARSING ==============~~~~~
+
+def parse_instruments(instruments,server_message):
+    #instrument_names = ["BOND", "GS", "MS", "WFC", "XLF", "VALBZ", "VALE"]
+    message_loaded = json.loads(server_message)
+    if message_loaded["type"]=="book" :
+        instruments[message_loaded["symbols"]]={"buy":message_loaded["symbols"]["buy"],
+            "sell":message_loaded["symbols"]["sell"]}
+
+def find_min_on_buy(buy_table):
+    minimum = 0
+    for val in buy_table:
+        minimum = max(val[0],minimum)
+    return minimum
+
+def find_max_on_sell(sell_table):
+    maximum = 10000000
+    for val in sell_table:
+        maximum = min(val[0],maximum)
+    return maximum
+
+def find_fair_value(instrument):
+    minimum = find_min_on_buy(instrument["buy"])
+    maximum = find_max_on_sell(instrument["sell"])
+    return (minimum+maximum)/2;
+
 
 # ~~~~~============== MAIN LOOP ==============~~~~~
 
 def main():
+    instruments = {}
     start_time=time.time()
     exchange = connect()
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     hello_from_exchange = read_from_exchange(exchange)
-    write_to_exchange(exchange, {"type": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
-
+    #write_to_exchange(exchange, {"type": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
+    order_id=0
     while(time.time()-start_time<1):
-        print("Exchange says:", read_from_exchange(exchange), file=sys.stderr)
+        exchange_says = read_from_exchange(exchange)
+        print("Exchange says:", exchange_says, file=sys.stderr)
+        parse_instruments(instruments,exchange_says)
+        for key in instruments.keys():
+            if key == "BOND":
+                if find_max_on_sell(instruments[key])<1000:
+                    pass
     # A common mistake people make is to call write_to_exchange() > 1
     # time for every read_from_exchange() response.
     # Since many write messages generate marketdata, this will cause an
