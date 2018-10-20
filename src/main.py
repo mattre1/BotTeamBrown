@@ -131,7 +131,6 @@ def main(port, exchange_hostname):
     bank_account = 0
     frequency,update_rate = {},{}
     history = {}
-    order_history = {}
     #order_history = {}
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
