@@ -71,9 +71,10 @@ def buy_order(exchange,instrument,price,amount,order_id):
 
 def sell_order(exchange,instrument,price,amount,order_id):
     write_to_exchange(exchange, {"type": "add", "order_id": order_id, "symbol":instrument,
-        "dir":"SELL","size":amount,"price":
+        "dir":"SELL","size":amount,"price":price})
 
 # ~~~~~============== MAIN LOOP ==============~~~~~
+
 def main(port, exchange_hostname):
     instruments = {}
     start_time=time.time()
