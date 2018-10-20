@@ -143,12 +143,12 @@ def main(port, exchange_hostname):
         sell_order(exchange, "BOND", 1001+len(sell_bond_list), 1, order_id)
         sell_bond_list.append(order_id)
         order_id += 1
-
+'''
 
 
 
     while(True):
-        if len(buy_bond_list) < 5:
+'''        if len(buy_bond_list) < 5:
             buy_order(exchange, "BOND", 999, 1, order_id)
             buy_bond_list.append(order_id)
             order_id += 1
