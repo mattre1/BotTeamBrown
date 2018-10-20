@@ -88,6 +88,7 @@ def main(port, exchange_hostname):
 
         if exchange_says["type"]=="ack" or exchange_says["type"]=="error" :
             print(f"Exchange says: {exchange_says}", file=sys.stderr)
+            print(f"Bank account: {bank_account}")
         
         parse_instruments(instruments, exchange_says)
 
