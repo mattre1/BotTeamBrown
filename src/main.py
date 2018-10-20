@@ -136,17 +136,37 @@ def main(port, exchange_hostname):
     #order_history = {}
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
+    buy_bond_list = []
+    sell_bound_list = []
+
     second_clock = time.time()
 
 
 
     order_id=0
     while(True):
+        if len(buy_bond_list) < 5:
+            buy_order(exchange, "BOND", 999-(len(buy_bond_list)//2), 1, order_id)
+            buy_order.append(order_id)
+            order_id += 1
+        
+        if len(sell_bound_list) < 5:
+            sell_order(exchange, "BOND", 1000+(len(sell_bound_list)//2), 1, order_id)
+            sell_order.append(order_id)
+            order_id += 1
+
         exchange_says = read_from_exchange(exchange)
 
         if exchange_says["type"]=="ack" or exchange_says["type"]=="error" :
             print(f"Exchange says: {exchange_says}", file=sys.stderr)
             print(f"Bank account: {bank_account}")
+
+            if exchange_says["order_id"] in sell_bound_list:
+                sell_bound_list -= 1
+
+            if exchange_says["order_id"] in buy_bond_list:
+                buy_bond_list -= 1
+
 
         parse_instruments(instruments, exchange_says)
         history_updater(history, exchange_says)
@@ -154,7 +174,7 @@ def main(port, exchange_hostname):
 
         if(time.time() - second_clock > 1.0):
             second_clock = time.time()
-            #print(frequency)
+            print(f"Bank account: {bank_account}")
 
         for key, val in update_rate.items():
             if fair_value_average(history[key],val)>fair_value_average(history[key],val/5):
