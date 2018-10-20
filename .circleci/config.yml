@@ -21,8 +21,8 @@ jobs:
       - run:
           name: Deploy bot
           command: |
-            scp -r requirements.txt ubuntu@34.255.3.221:~
-            scp -r src/ ubuntu@34.255.3.221:~/bot
+            scp -o StrictHostKeyChecking=no -r requirements.txt ubuntu@34.255.3.221:~
+            scp -o StrictHostKeyChecking=no -r src/ ubuntu@34.255.3.221:~/bot
 
 workflows:
   version: 2
