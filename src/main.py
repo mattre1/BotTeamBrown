@@ -7,7 +7,7 @@
 
 from __future__ import print_function
 
-import time
+# import time
 import sys
 import socket
 import json
@@ -51,8 +51,11 @@ def main():
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     hello_from_exchange = read_from_exchange(exchange)
     write_to_exchange(exchange, {"type": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10})
+    
     while(time.time()-start_time<1):
-        print("Exchange says:", read_from_exchange(echange), file=sys.stderr)
+        print("Exchange says:", read_from_exchange(exchange), file=sys.stderr)
+
+
     # A common mistake people make is to call write_to_exchange() > 1
     # time for every read_from_exchange() response.
     # Since many write messages generate marketdata, this will cause an
