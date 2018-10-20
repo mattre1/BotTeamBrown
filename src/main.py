@@ -34,9 +34,12 @@ def read_from_exchange(exchange):
 def parse_instruments(instruments, message_loaded):
     #instrument_names = ["BOND", "GS", "MS", "WFC", "XLF", "VALBZ", "VALE"]
     if message_loaded["type"] == "book" :
-        print(f"Message: {message_loaded}", file=sys.stderr)
-        instruments[message_loaded["symbols"]]={"buy":message_loaded["symbols"]["buy"],
-            "sell":message_loaded["symbols"]["sell"]}
+        # print(f"Message: {message_loaded}", file=sys.stderr)
+        
+        instruments[message_loaded["symbol"]] = {
+            "buy":message_loaded["symbol"]["buy"],
+            "sell":message_loaded["symbol"]["sell"]
+            }
 
 def find_min_on_buy(buy_table):
     minimum = 0
