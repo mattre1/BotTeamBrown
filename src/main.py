@@ -149,7 +149,7 @@ def main(port, exchange_hostname):
             buy_order(exchange, "BOND", 999-(len(buy_bond_list)//2), 1, order_id)
             buy_order.append(order_id)
             order_id += 1
-        
+
         if len(sell_bound_list) < 5:
             sell_order(exchange, "BOND", 1000+(len(sell_bound_list)//2), 1, order_id)
             sell_order.append(order_id)
@@ -177,6 +177,7 @@ def main(port, exchange_hostname):
             print(f"Bank account: {bank_account}")
 
         for key, val in update_rate.items():
+            print(fair_value_average(history[key],val),fair_value_average(history[key],val/5)
             if fair_value_average(history[key],val)>fair_value_average(history[key],val/5):
                 order_values=find_min_on_sell(val["sell"])
                 bank_account-=order_values[0]*order_values[1]
