@@ -147,7 +147,7 @@ def main(port, exchange_hostname):
     '''
 
 
-
+    max_orders=0
     while(True):
         exchange_says = read_from_exchange(exchange)
 
@@ -201,11 +201,15 @@ def main(port, exchange_hostname):
                         buy_order(exchange,key,order_values[0],
                             order_values[1],order_id)
                         order_id+=1
+                        max_orders+=order_values[1]
 
 
                 else:
+                    if max_orders<-100:
+                        break
                     sell_order(exchange, key, find_max_on_buy(instruments[key]["buy"])[0],
                             find_max_on_buy(instruments[key]["buy"])[1], order_id)
+                    max_orders+=order_values[1]
                     order_id+=1
         '''
         for key, val in instruments.items():
