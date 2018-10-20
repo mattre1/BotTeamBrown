@@ -15,22 +15,9 @@ import json
 # ~~~~~============== CONFIGURATION  ==============~~~~~
 # replace REPLACEME with your team name!
 team_name="TEAMBROWS"
-# This variable dictates whether or not the bot is connecting to the prod
-# or test exchange. Be careful with this switch!
-test_mode = True
-
-# This setting changes which test exchange is connected to.
-# 0 is prod-like
-# 1 is slower
-# 2 is empty
-test_exchange_index=0
-prod_exchange_hostname="production"
-
-port=25000 + (test_exchange_index if test_mode else 0)
-exchange_hostname = "test-exch-" + team_name if test_mode else prod_exchange_hostname
 
 # ~~~~~============== NETWORKING CODE ==============~~~~~
-def connect():
+def connect(port, exchange_hostname):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((exchange_hostname, port))
     return s.makefile('rw', 1)
@@ -45,9 +32,9 @@ def read_from_exchange(exchange):
 
 # ~~~~~============== MAIN LOOP ==============~~~~~
 
-def main():
+def main(port, exchange_hostname):
     start_time=time.time()
-    exchange = connect()
+    exchange = connect(port, exchange_hostname)
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     hello_from_exchange = read_from_exchange(exchange)
     write_to_exchange(exchange, {"type": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
@@ -61,4 +48,21 @@ def main():
     print("The exchange replied:", hello_from_exchange, file=sys.stderr)
 
 if __name__ == "__main__":
-    main()
+    port = 25000
+    exchange_hostname = "test-exch-"
+
+    if len(sys.argv) >= 2:
+        print(f"Bot args: {str(sys.argv)}", file=sys.stderr)
+
+        if sys.argv[1] == "test":
+            exchange_hostname += team_name
+        elif sys.argv[1] == "test_slow":
+            port += 1
+            exchange_hostname += team_name
+        elif sys.argv[1] == "prod":
+            exchange_hostname += "production"
+    else:
+        port += 2
+        exchange_hostname += team_name
+
+    main(port, exchange_hostname)
