@@ -105,6 +105,8 @@ def frequency_counter(frequency, update_ratio, exchange_says):
     if exchange_says["type"] == "book":
             frequency[exchange_says["symbol"]] += 1
 
+    print(f"Update ratio (inside):{update_ratio}")
+
 
 def history_updater(history, exchange_says):
     history = {
