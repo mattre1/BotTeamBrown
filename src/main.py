@@ -173,7 +173,7 @@ def main(port, exchange_hostname):
             print(f"Bank account: {bank_account}")
 
             if exchange_says["order_id"] in sell_bound_list:
-                print(f"My sell order was bought. {len(sell_bond_list)} left"")
+                print(f"My sell order was bought. {len(sell_bond_list)} left")
                 sell_bound_list.remove(exchange_says["order_id"])
 
             if exchange_says["order_id"] in buy_bond_list:
