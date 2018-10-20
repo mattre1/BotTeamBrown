@@ -240,6 +240,7 @@ def main(port, exchange_hostname):
         '''
         if exchange_says["type"]=="fill":
             if exchange_says["dir"]=="BUY":
+                print("filled",file=sys.stderr)
                 bank_account+=exchange_says["price"]*exchange_says["size"]
 
     # print(order_history)
