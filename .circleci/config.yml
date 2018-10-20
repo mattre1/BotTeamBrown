@@ -23,7 +23,7 @@ jobs:
           name: Deploy bot
           command: |
             scp -o StrictHostKeyChecking=no -r requirements.txt ubuntu@34.255.3.221:~
-            scp -o StrictHostKeyChecking=no -r src/* ubuntu@34.255.3.221:~/bot
+            scp -o StrictHostKeyChecking=no -r src/* ubuntu@34.255.3.221:~/prod_bot
             ssh ubuntu@34.255.3.221 'auto_deploy prod'
 
   deploy_test:
@@ -35,7 +35,7 @@ jobs:
           name: Deploy bot
           command: |
             scp -o StrictHostKeyChecking=no -r requirements.txt ubuntu@34.255.3.221:~
-            scp -o StrictHostKeyChecking=no -r src/* ubuntu@34.255.3.221:~/bot
+            scp -o StrictHostKeyChecking=no -r src/* ubuntu@34.255.3.221:~/test_bot
             ssh ubuntu@34.255.3.221 'auto_deploy test'
 
 workflows:
