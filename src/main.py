@@ -36,8 +36,8 @@ def parse_instruments(instruments, message_loaded):
         # print(f"Message: {message_loaded}", file=sys.stderr)
 
         instruments[message_loaded["symbol"]] = {
-            "buy":message_loaded["symbol"]["buy"],
-            "sell":message_loaded["symbol"]["sell"]
+            buy: message_loaded["symbol"]["buy"],
+            sell: message_loaded["symbol"]["sell"]
             }
 
 def find_min_on_sell(sell_table):
