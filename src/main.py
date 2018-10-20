@@ -217,7 +217,7 @@ def main(port, exchange_hostname):
                         order_history.append([key,order_values[0],order_id,1,order_values[1]])
         #print("unexpected",file=sys.stderr)
         for order in order_history:
-            if find_fair_value(instruments[order[0]])*1.01>order_values[0] or find_fair_value(instruments[order[0]])*0.99<order_values[0] :
+            if find_fair_value(instruments[order[0]])*1.01>order[1] or find_fair_value(instruments[order[0]])*0.99<order[1] :
                     cancel_order(exchange,order[2])
                     if order[3]==1:
                         bank_account -= order[2]*order[4]
