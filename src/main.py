@@ -87,7 +87,7 @@ def main(port, exchange_hostname):
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
     order_id=0
-    while(time.time()-start_time<1):
+    while(True):
         exchange_says = read_from_exchange(exchange)
         if exchange_says["type"]=="ack" or exchange_says["type"]=="error" :
             print("Exchange says:", exchange_says, file=sys.stderr)
@@ -95,8 +95,8 @@ def main(port, exchange_hostname):
 
         for key, val in instruments.items():
             if key == "BOND":
-                print(find_min_on_sell(val["sell"])[0],
-                    find_max_on_buy(val["buy"])[0])
+                #print(find_min_on_sell(val["sell"])[0],
+                #    find_max_on_buy(val["buy"])[0])
                 if find_min_on_sell(val["sell"])[0]<1000:
                     buy_order(exchange,key,find_min_on_sell(val["sell"])[0],
                         find_min_on_sell(val["sell"])[1],order_id)
