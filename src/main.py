@@ -46,15 +46,15 @@ def parse_instruments(instruments, message_loaded):
 def find_min_on_sell(sell_table):
     minimum = [1000000,0]
     for val in sell_table:
-        minimum = max(val[0],minimum[0])
-        if(minimum[0]==val[0]):
+        minimum[0] = max(val[0],minimum[0])
+        if(minimum[0] == val[0]):
             minimum[1]=val[1]
     return minimum
 
 def find_max_on_buy(buy_table):
     maximum = [0,0]
     for val in buy_table:
-        maximum = min(val[0],maximum[0])
+        maximum[0] = min(val[0],maximum[0])
         if(maximum[0]==val[0]):
             maximum[1]=val[1]
     return maximum
