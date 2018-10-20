@@ -107,7 +107,7 @@ def main(port, exchange_hostname):
     exchange = connect(port, exchange_hostname)
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     read_from_exchange(exchange)
-    bank_account = 0
+    bank_account = 0.0
     frequency = {
         "BOND":0,
         "GS":0,
