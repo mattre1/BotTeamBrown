@@ -13,7 +13,8 @@ jobs:
           name: Check syntax
           command: |
             pyflakes src/*.py
-  build:
+
+  deploy_prod:
     docker:
       - image: circleci/python:3.6-jessie
     steps:
@@ -23,16 +24,34 @@ jobs:
           command: |
             scp -o StrictHostKeyChecking=no -r requirements.txt ubuntu@34.255.3.221:~
             scp -o StrictHostKeyChecking=no -r src/* ubuntu@34.255.3.221:~/bot
-            ssh ubuntu@34.255.3.221 'auto_deploy'
+            ssh ubuntu@34.255.3.221 'auto_deploy prod'
+
+  deploy_test:
+    docker:
+      - image: circleci/python:3.6-jessie
+    steps:
+      - checkout
+      - run:
+          name: Deploy bot
+          command: |
+            scp -o StrictHostKeyChecking=no -r requirements.txt ubuntu@34.255.3.221:~
+            scp -o StrictHostKeyChecking=no -r src/* ubuntu@34.255.3.221:~/bot
+            ssh ubuntu@34.255.3.221 'auto_deploy test'
 
 workflows:
   version: 2
   test_and_build:
     jobs:
       - test
-      - build:
+      - deploy_test:
           requires:
             - test
           filters:
             branches:
               only: master
+      - deploy_prod:
+          requires:
+            - test
+          filters:
+            branches:
+              only: production
