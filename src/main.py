@@ -7,7 +7,6 @@
 
 from __future__ import print_function
 
-import time
 import sys
 import socket
 import json
@@ -81,7 +80,6 @@ def sell_order(exchange,instrument,price,amount,order_id):
 
 def main(port, exchange_hostname):
     instruments = {}
-    start_time=time.time()
     exchange = connect(port, exchange_hostname)
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     read_from_exchange(exchange)
