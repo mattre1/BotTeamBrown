@@ -162,10 +162,12 @@ def main(port, exchange_hostname):
             print(f"Bank account: {bank_account}")
 
             if exchange_says["order_id"] in sell_bound_list:
-                sell_bound_list -= 1
+                print("My sell order was bought")
+                sell_bound_list.remove(exchange_says["order_id"])
 
             if exchange_says["order_id"] in buy_bond_list:
-                buy_bond_list -= 1
+                print("My buy order was selled")
+                buy_bond_list.remove(exchange_says["order_id"])
 
 
         parse_instruments(instruments, exchange_says)
