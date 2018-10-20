@@ -101,7 +101,6 @@ def frequency_counter(frequency, update_ratio, exchange_says):
         "XLF":200,
         "VALBZ":800,
         "VALE":300
-
         }
     if exchange_says["type"] == "book":
             frequency[exchange_says["symbol"]] += 1
@@ -177,7 +176,7 @@ def main(port, exchange_hostname):
         if(time.time() - second_clock > 1.0):
             second_clock = time.time()
             print(f"Bank account: {bank_account}")
-
+        print(update_rate)
         for key, val in update_rate.items():
             print(fair_value_average(history[key],val),fair_value_average(history[key],val/5)
             if fair_value_average(history[key],val)>fair_value_average(history[key],val/5):
