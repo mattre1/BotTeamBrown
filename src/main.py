@@ -79,6 +79,9 @@ def sell_order(exchange,instrument,price,amount,order_id):
         "dir":"SELL","size":amount,"price":price})
 
 
+def cancel_order(exchange,order_id):
+    write_to_exchange(exchange, {"type": "out", "order_id": order_id})
+
 # ~~~~~============== Frequency and history updaters ==============~~~~~
 
 def frequency_counter(frequency, update_ratio, exchange_says):
@@ -124,7 +127,7 @@ def main(port, exchange_hostname):
         "VALE":300
         }
     history = { "BOND":[], "GS":[], "MS":[], "WFC":[], "XLF":[], "VALBZ":[], "VALE":[]}
-    #order_history = {}
+    order_history = []
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
     #buy_bond_list = []
@@ -150,7 +153,7 @@ def main(port, exchange_hostname):
     max_orders=0
     while(True):
         exchange_says = read_from_exchange(exchange)
-
+        print(exchange_says)
         '''
         if len(buy_bond_list) < 5:
             buy_order(exchange, "BOND", 999, 1, order_id)
@@ -190,7 +193,7 @@ def main(port, exchange_hostname):
 
             #print(fair_value_average(history[key],val), fair_value_average(history[key], val//5))
             if key in instruments:
-                if fair_value_average(history[key],val//5) > fair_value_average(history[key], val//20) :
+                if fair_value_average(history[key],val//3) > fair_value_average(history[key], val//15) :
 
                     order_values = find_min_on_sell(instruments[key]["sell"])
                     bank_account -= order_values[0]*order_values[1]
@@ -201,16 +204,20 @@ def main(port, exchange_hostname):
                         buy_order(exchange,key,order_values[0],
                             order_values[1],order_id)
                         order_id+=1
-                        max_orders+=order_values[1]
-
+                        order_history.append([key,order_values[0],order_id])
 
                 else:
-                    if max_orders<-100:
-                        break
-                    sell_order(exchange, key, find_max_on_buy(instruments[key]["buy"])[0],
-                            find_max_on_buy(instruments[key]["buy"])[1], order_id)
-                    max_orders+=find_max_on_buy(instruments[key]["buy"])[1]
+                    order_values = find_max_on_buy(instruments[key]["buy"])
+
+                    sell_order(exchange, key, order_values[0],
+                            order_values[1], order_id)
                     order_id+=1
+                    order_history.append([key,order_values[0],order_id])
+
+        for order in order_history:
+            if fair_value(instruments[order[0]])*1.01>order_values[0] or
+                fair_value(instruments[order[0]])*0.99<order_values[0] :
+                    cancel_order(exchange,order[2])
         '''
         for key, val in instruments.items():
             if key == "BOND":
