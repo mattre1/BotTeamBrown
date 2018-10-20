@@ -1,4 +1,4 @@
-#!/bin/pypy
+#!/usr/bin/pypy
 
 # ~~~~~==============   HOW TO RUN   ==============~~~~~
 # 1) Configure things in CONFIGURATION section
