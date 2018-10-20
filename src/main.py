@@ -187,7 +187,7 @@ def main(port, exchange_hostname):
 
             if fair_value_average(history[key],val) > fair_value_average(history[key], val//5) :
 
-                order_values = find_min_on_sell(val["sell"])
+                order_values = find_min_on_sell(instruments[key]["sell"])
                 bank_account -= order_values[0]*order_values[1]
 
                 if bank_account < -30000:
@@ -198,9 +198,8 @@ def main(port, exchange_hostname):
                     order_id+=1
 
             else:
-                print(f"tst: {find_max_on_buy(val['buy'])[0]}")
-                sell_order(exchange, key, find_max_on_buy(val["buy"])[0],
-                        find_max_on_buy(val["buy"])[1], order_id)
+                sell_order(exchange, key, find_max_on_buy(instruments[key]["buy"])[0],
+                        find_max_on_buy(instruments[key]["buy"])[1], order_id)
                 order_id+=1
 
         for key, val in instruments.items():
