@@ -17,6 +17,7 @@ team_name="TEAMBROWS"
 
 # ~~~~~============== NETWORKING CODE ==============~~~~~
 def connect(port, exchange_hostname):
+    print(f"Connect: {exchange_hostname}:{port}")
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((exchange_hostname, port))
     return s.makefile('rw', 1)
@@ -27,7 +28,6 @@ def write_to_exchange(exchange, obj):
 
 def read_from_exchange(exchange):
     tmp = exchange.readline()
-    print(tmp, file=sys.stderr)
     return json.loads(tmp)
 
 # ~~~~~============== STATE PARSING ==============~~~~~
@@ -85,8 +85,10 @@ def main(port, exchange_hostname):
     order_id=0
     while(True):
         exchange_says = read_from_exchange(exchange)
+
         if exchange_says["type"]=="ack" or exchange_says["type"]=="error" :
-            print("Exchange says:", exchange_says, file=sys.stderr)
+            print(f"Exchange says: {exchange_says}", file=sys.stderr)
+        
         parse_instruments(instruments, exchange_says)
 
         for key, val in instruments.items():
