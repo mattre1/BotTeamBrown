@@ -96,6 +96,8 @@ def history_updater(history, exchange_says):
 
 
 
+
+
 # ~~~~~============== MAIN LOOP ==============~~~~~
 def main(port, exchange_hostname):
     instruments = {}
@@ -130,7 +132,7 @@ def main(port, exchange_hostname):
 
     second_clock = time.time()
 
-
+'''
 
     order_id=0
     for i in range(5):
@@ -169,7 +171,7 @@ def main(port, exchange_hostname):
             if exchange_says["order_id"] in buy_bond_list:
                 print(f"My buy order was selled. {len(buy_bond_list)} left")
                 buy_bond_list.remove(exchange_says["order_id"])
-
+'''
 
         parse_instruments(instruments, exchange_says)
         history_updater(history, exchange_says)
@@ -179,13 +181,13 @@ def main(port, exchange_hostname):
             second_clock = time.time()
             print(f"Bank account: {bank_account}")
 
-        print(f"Update rate: {update_rate}")
+        #print(f"Update rate: {update_rate}")
 
         for key, val in update_rate.items():
 
-            print(fair_value_average(history[key],val), fair_value_average(history[key], val//5))
+            #print(fair_value_average(history[key],val), fair_value_average(history[key], val//5))
             if key in instruments:
-                if fair_value_average(history[key],val) > fair_value_average(history[key], val//5) :
+                if fair_value_average(history[key],val) > fair_value_average(history[key], val//10) :
 
                     order_values = find_min_on_sell(instruments[key]["sell"])
                     bank_account -= order_values[0]*order_values[1]
@@ -197,11 +199,12 @@ def main(port, exchange_hostname):
                             order_values[1],order_id)
                         order_id+=1
 
+
                 else:
                     sell_order(exchange, key, find_max_on_buy(instruments[key]["buy"])[0],
                             find_max_on_buy(instruments[key]["buy"])[1], order_id)
                     order_id+=1
-
+        '''
         for key, val in instruments.items():
             if key == "BOND":
                 #print(find_min_on_sell(val["sell"])[0],
@@ -222,7 +225,7 @@ def main(port, exchange_hostname):
         if exchange_says["type"]=="fill":
             if exchange_says["dir"]=="BUY":
                 bank_account+=exchange_says["price"]*exchange_says["size"]
-
+        '''
     # print(order_history)
 
 
