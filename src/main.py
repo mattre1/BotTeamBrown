@@ -17,6 +17,8 @@ team_name="TEAMBROWS"
 
 # ~~~~~============== NETWORKING CODE ==============~~~~~
 def connect(port, exchange_hostname):
+    print(f"Connect: {exchange_hostname}:{port}")
+    
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((exchange_hostname, port))
     return s.makefile('rw', 1)
