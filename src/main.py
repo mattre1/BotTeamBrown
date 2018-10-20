@@ -118,7 +118,7 @@ def history_updater(history, exchange_says):
         "VALE":[]
         }
     if exchange_says["type"] == "book":
-        history["type"].append(find_fair_value(exchange_says))
+        history[exchange_says["symbol"]].append(find_fair_value(exchange_says))
 
 
 
