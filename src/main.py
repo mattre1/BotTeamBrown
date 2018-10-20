@@ -239,7 +239,7 @@ def main(port, exchange_hostname):
                     order_id+=1
         '''
         if exchange_says["type"]=="fill":
-            print(exchange_says["dir"],file=sys.stderr)
+            print("filled2",file=sys.stderr)
             if exchange_says["dir"]=="BUY":
                 print("filled",file=sys.stderr)
                 bank_account+=exchange_says["price"]*exchange_says["size"]
