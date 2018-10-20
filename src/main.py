@@ -85,7 +85,7 @@ def frequency_counter(frequency, update_ratio, exchange_says):
     if exchange_says["type"] == "book":
             frequency[exchange_says["symbol"]] += 1
 
-    print(f"Update ratio (inside):{update_ratio}")
+    #print(f"Update ratio (inside):{update_ratio}")
 
 
 def history_updater(history, exchange_says):
@@ -148,7 +148,8 @@ def main(port, exchange_hostname):
 
 
     while(True):
-    ''' if len(buy_bond_list) < 5:
+        '''
+        if len(buy_bond_list) < 5:
             buy_order(exchange, "BOND", 999, 1, order_id)
             buy_bond_list.append(order_id)
             order_id += 1
@@ -171,7 +172,7 @@ def main(port, exchange_hostname):
             if exchange_says["order_id"] in buy_bond_list:
                 print(f"My buy order was selled. {len(buy_bond_list)} left")
                 buy_bond_list.remove(exchange_says["order_id"])
-'''
+        '''
 
         parse_instruments(instruments, exchange_says)
         history_updater(history, exchange_says)
