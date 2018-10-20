@@ -153,7 +153,7 @@ def main(port, exchange_hostname):
     #max_orders=0
     while(True):
         exchange_says = read_from_exchange(exchange)
-        print(exchange_says)
+        print(exchange_says,file=sys.stderr)
         '''
         if len(buy_bond_list) < 5:
             buy_order(exchange, "BOND", 999, 1, order_id)
