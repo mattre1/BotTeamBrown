@@ -187,7 +187,7 @@ def main(port, exchange_hostname):
 
             #print(fair_value_average(history[key],val), fair_value_average(history[key], val//5))
             if key in instruments:
-                if fair_value_average(history[key],val) > fair_value_average(history[key], val//10) :
+                if fair_value_average(history[key],val//5) > fair_value_average(history[key], val//20) :
 
                     order_values = find_min_on_sell(instruments[key]["sell"])
                     bank_account -= order_values[0]*order_values[1]
