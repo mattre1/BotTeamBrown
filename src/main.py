@@ -151,7 +151,7 @@ def main(port, exchange_hostname):
             order_id += 1
         
         if len(sell_bound_list) < 5:
-            sell_order(exchange, "BOND", 1000+(len(sell_bound_list)//2), 1, order_id)
+            sell_order(exchange, "BOND", 1001+(len(sell_bound_list)//2), 1, order_id)
             sell_bound_list.append(order_id)
             order_id += 1
 
