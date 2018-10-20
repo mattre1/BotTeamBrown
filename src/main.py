@@ -95,6 +95,8 @@ def main(port, exchange_hostname):
 
         for key, val in instruments.items():
             if key == "BOND":
+                print(find_min_on_sell(val["sell"])[0],
+                    find_max_on_buy(val["buy"])[0])
                 if find_min_on_sell(val["sell"])[0]<1000:
                     buy_order(exchange,key,find_min_on_sell(val["sell"])[0],
                         find_min_on_sell(val["sell"])[1],order_id)
