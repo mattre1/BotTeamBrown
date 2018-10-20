@@ -215,8 +215,7 @@ def main(port, exchange_hostname):
                     order_history.append([key,order_values[0],order_id])
 
         for order in order_history:
-            if fair_value(instruments[order[0]])*1.01>order_values[0] or
-                fair_value(instruments[order[0]])*0.99<order_values[0] :
+            if fair_value(instruments[order[0]])*1.01>order_values[0] or fair_value(instruments[order[0]])*0.99<order_values[0] :
                     cancel_order(exchange,order[2])
         '''
         for key, val in instruments.items():
