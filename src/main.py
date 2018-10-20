@@ -149,10 +149,11 @@ def main(port, exchange_hostname):
         order_id += 1
     '''
 
-
+    sells,buys=0,0
     while(True):
         exchange_says = read_from_exchange(exchange)
         #print(exchange_says,file=sys.stderr)
+
         '''
         if len(buy_bond_list) < 5:
             buy_order(exchange, "BOND", 999, 1, order_id)
@@ -208,18 +209,19 @@ def main(port, exchange_hostname):
                         pass
                     else:
                         bank_account -= order_values[0]*order_values[1]
+                        buys-=order_values[0]*order_values[1]
 
                         sell_order(exchange, key, order_values[0],
                                 order_values[1], order_id)
                         order_id+=1
                         order_history.append([key,order_values[0],order_id,1,order_values[1]])
-        print("unexpected",file=sys.stderr)
+        #print("unexpected",file=sys.stderr)
         for order in order_history:
             if find_fair_value(instruments[order[0]])*1.01>order_values[0] or find_fair_value(instruments[order[0]])*0.99<order_values[0] :
                     cancel_order(exchange,order[2])
                     if order[3]==1:
                         bank_account -= order[2]*order[4]
-
+                        buys -= order[2]*order[4]
                     order_history.remove(order)
 
 
@@ -242,12 +244,14 @@ def main(port, exchange_hostname):
                         find_max_on_buy(val["buy"])[1],order_id)
                     order_id+=1
         '''
+
         #print("nowawersja",file=sys.stderr)
         if exchange_says["type"]=="fill":
             #print(exchange_says,file=sys.stderr)
             if exchange_says["dir"]=="SELL":
                 print("filledsell",file=sys.stderr)
                 bank_account+=exchange_says["price"]*exchange_says["size"]
+                sells+=exchange_says["price"]*exchange_says["size"]
 
     # print(order_history)
 
