@@ -31,9 +31,8 @@ def read_from_exchange(exchange):
 
 # ~~~~~============== STATE PARSING ==============~~~~~
 
-def parse_instruments(instruments,server_message):
+def parse_instruments(instruments, message_loaded):
     #instrument_names = ["BOND", "GS", "MS", "WFC", "XLF", "VALBZ", "VALE"]
-    message_loaded = json.loads(server_message)
     if message_loaded["type"]=="book" :
         instruments[message_loaded["symbols"]]={"buy":message_loaded["symbols"]["buy"],
             "sell":message_loaded["symbols"]["sell"]}
@@ -69,7 +68,7 @@ def main(port, exchange_hostname):
     while(time.time()-start_time<1):
         exchange_says = read_from_exchange(exchange)
         print("Exchange says:", exchange_says, file=sys.stderr)
-        parse_instruments(instruments,exchange_says)
+        parse_instruments(instruments, exchange_says)
 
         for key, val in instruments.items():
             if key == "BOND":
