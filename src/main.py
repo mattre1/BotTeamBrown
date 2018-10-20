@@ -128,6 +128,7 @@ if __name__ == "__main__":
         print(f"Bot args: {str(sys.argv)}", file=sys.stderr)
 
         if sys.argv[1] == "test":
+            pass
         elif sys.argv[1] == "test_slow":
             port += 1
         elif sys.argv[1] == "prod":
