@@ -136,7 +136,7 @@ def main(port, exchange_hostname):
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
     buy_bond_list = []
-    sell_bound_list = []
+    sell_bond_list = []
 
     second_clock = time.time()
 
@@ -148,8 +148,8 @@ def main(port, exchange_hostname):
         buy_bond_list.append(order_id)
         order_id += 1
 
-        sell_order(exchange, "BOND", 1001+len(sell_bound_list), 1, order_id)
-        sell_bound_list.append(order_id)
+        sell_order(exchange, "BOND", 1001+len(sell_bond_list), 1, order_id)
+        sell_bond_list.append(order_id)
         order_id += 1
 
 
@@ -161,9 +161,9 @@ def main(port, exchange_hostname):
             buy_bond_list.append(order_id)
             order_id += 1
 
-        if len(sell_bound_list) < 5:
+        if len(sell_bond_list) < 5:
             sell_order(exchange, "BOND", 1001, 1, order_id)
-            sell_bound_list.append(order_id)
+            sell_bond_list.append(order_id)
             order_id += 1
 
         exchange_says = read_from_exchange(exchange)
@@ -172,9 +172,9 @@ def main(port, exchange_hostname):
             print(f"Exchange says: {exchange_says}", file=sys.stderr)
             print(f"Bank account: {bank_account}")
 
-            if exchange_says["order_id"] in sell_bound_list:
+            if exchange_says["order_id"] in sell_bond_list:
                 print(f"My sell order was bought. {len(sell_bond_list)} left")
-                sell_bound_list.remove(exchange_says["order_id"])
+                sell_bond_list.remove(exchange_says["order_id"])
 
             if exchange_says["order_id"] in buy_bond_list:
                 print(f"My buy order was selled. {len(buy_bond_list)} left")
