@@ -130,9 +130,10 @@ def main(port, exchange_hostname):
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     read_from_exchange(exchange)
     bank_account = 0
-    frequency,update_ratio = {},{}
+    frequency,update_rate = {},{}
     history = {}
     order_history = {}
+    #order_history = {}
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
     second_clock = time.time()
@@ -157,7 +158,7 @@ def main(port, exchange_hostname):
 
         for key, val in update_rate.items():
             if fair_value_average(history[key],val)>fair_value_average(history[key],val/5):
-                pass
+
 
         for key, val in instruments.items():
             if key == "BOND":
@@ -179,6 +180,7 @@ def main(port, exchange_hostname):
         if exchange_says["type"]=="fill":
             if exchange_says["dir"]=="BUY":
                 bank_account+=exchange_says["price"]*exchange_says["size"]
+    print(order_history)
 
 
 if __name__ == "__main__":
