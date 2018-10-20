@@ -41,17 +41,20 @@ def parse_instruments(instruments, message_loaded):
             "sell":message_loaded["symbol"]["sell"]
             }
 
+
 def find_min_on_buy(buy_table):
     minimum = 0
     for val in buy_table:
         minimum = max(val[0],minimum)
     return minimum
 
+
 def find_max_on_sell(sell_table):
     maximum = 10000000
     for val in sell_table:
         maximum = min(val[0],maximum)
     return maximum
+
 
 def find_fair_value(instrument):
     minimum = find_min_on_buy(instrument["buy"])
