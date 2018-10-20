@@ -63,6 +63,11 @@ def find_fair_value(instrument):
     maximum = find_max_on_buy(instrument["buy"])[0]
     return (minimum+maximum)/2;
 
+
+def fair_value_average(history, count):
+    count = max(count,1)
+    return sum(history[-count:])/count
+
 # ~~~~~============== EXCHANGE CONTACT ==============~~~~~
 
 def buy_order(exchange,instrument,price,amount,order_id):
@@ -74,9 +79,9 @@ def sell_order(exchange,instrument,price,amount,order_id):
         "dir":"SELL","size":amount,"price":price})
 
 
-# ~~~~~============== MAIN LOOP ==============~~~~~
+# ~~~~~============== Frequency and history updaters ==============~~~~~
 
-def frequency_counter(frequency, server_message):
+def frequency_counter(frequency, update_ratio, exchange_says):
     if "BOND" not in frequency:
         frequency = {
         "BOND":0,
@@ -87,8 +92,33 @@ def frequency_counter(frequency, server_message):
         "VALBZ":0,
         "VALE":0
         }
+    if "BOND" not in update_ratio:
+        update_ratio = {
+        "BOND":200,
+        "GS":800,
+        "MS":800,
+        "WFC":800,
+        "XLF":200,
+        "VALBZ":800,
+        "VALE":300
+
+        }
     if exchange_says["type"] == "book":
             frequency[exchange_says["symbol"]] += 1
+
+
+def history_updater(history, exchange_says):
+    history = {
+        "BOND":[],
+        "GS":[],
+        "MS":[],
+        "WFC":[],
+        "XLF":[],
+        "VALBZ":[],
+        "VALE":[]
+        }
+    if exchange_says["type"] == "book":
+        history["type"].append(find_fair_value(exchange_says))
 
 
 
@@ -100,9 +130,9 @@ def main(port, exchange_hostname):
     write_to_exchange(exchange, {"type": "hello", "team": team_name.upper()})
     read_from_exchange(exchange)
     bank_account = 0
-    frequency = {}
-    history = []
-
+    frequency,update_ratio = {},{}
+    history = {}
+    order_history = {}
     #write_to_exchange(exchange, {"stype": "add", "order_id": 0, "symbol":"BOND","dir":"BUY","size":10,"price":1})
 
     second_clock = time.time()
@@ -118,11 +148,16 @@ def main(port, exchange_hostname):
             print(f"Bank account: {bank_account}")
 
         parse_instruments(instruments, exchange_says)
-
+        history_updater(history, exchange_says)
+        frequency_counter(frequency, update_rate, exchange_says)
 
         if(time.time() - second_clock > 1.0):
             second_clock = time.time()
-            print(frequency)
+            #print(frequency)
+
+        for key, val in update_rate.items():
+            if fair_value_average(history[key],val)>fair_value_average(history[key],val/5):
+
 
         for key, val in instruments.items():
             if key == "BOND":
